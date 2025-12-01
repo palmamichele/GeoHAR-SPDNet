@@ -11,9 +11,32 @@ function block_diag_matrix = diagblockhar(varargin)
         matrices = varargin;
     end
 
+
+
     % Compute Fréchet means using the specified method
     frecw = frechet_mean(matrices{end-4:end}, method);
     frecm = frechet_mean(matrices{:}, method);
+    
+    %assert matrices are SPD
+    try
+        chol(frecw);
+    catch
+        
+        error('frecw not SPD')
+    end
+    
+    try
+        chol(frecm);
+    catch
+        
+        error('frecm not SPD')
+    end
+    
+
+   
+    
+
+    
 
     % Build the block diagonal matrix
     block_diag_matrix = blkdiag(matrices{22}, frecw, frecm);

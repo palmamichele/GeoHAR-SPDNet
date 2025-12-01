@@ -3,7 +3,8 @@ confPath;
 rng('default');
 rng(0) ;
 format long;
-cd('/Users/michelepalma/Downloads/research_projects/GeoHAR-SPDNet/GeoHAR-SPDNet_v2')
+cd('/Users/palmamichele/Desktop/GeoHAR-SPDNet/GeoHAR-SPDNet_v2')
+
 
 %--ARGS--%
 opts.loss_function= "mse"; % values: mse, loge, frob
@@ -13,7 +14,7 @@ compute_geohar=true;
 if compute_geohar==true
     n_lags=3;  %as the diag block will always contain 3 matrices of size nxn where n is the number of stocks
 end
-method = 'procrustes';
+method = 'procrustes'; %values: procrustes, log-euclidean
 data_filename = "RCOV50.csv"; %RCOVReal.csv
 opts.dataDir = fullfile('./data') ;
 opts.imdbPathtrain = fullfile(opts.dataDir, data_filename);

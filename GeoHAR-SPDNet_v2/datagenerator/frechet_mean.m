@@ -4,6 +4,9 @@ function M = frechet_mean(varargin)
     % varargin{end} can contain the computation method as a string: 'procrustes' or 'log-euclidean'
     % Output:
     % M - the Fréchet mean of the SPD matrices
+    
+
+    
 
     % Default method
     if ischar(varargin{end}) || isstring(varargin{end})
@@ -13,9 +16,15 @@ function M = frechet_mean(varargin)
         method = 'log-euclidean'; % Default method
     end
 
+
+
+    
     n = numel(varargin); % Number of matrices passed
     d = size(varargin{1}, 1); % Dimensionality of the SPD matrices
 
+
+
+    M=zeros(d);
     switch lower(method)
         case 'log-euclidean'
             % Compute mean in the Log-Euclidean metric
@@ -27,28 +36,49 @@ function M = frechet_mean(varargin)
 
         case 'procrustes'
             % Compute mean using the Procrustes method
-            M = varargin{1}; % Start with the first matrix
             tol = 1e-6; % Convergence tolerance
             maxIter = 100; % Maximum iterations
-            iter = 0;
+            L = cell(1, n);
+            for i=1:n
+                Si = makespd(varargin{i}); % Ensure the matrix is SPD
+                L{i} = msqrt(Si);
+            end
+            L_hat = L{1}; 
+            iter=0; 
+
             while true
                 sumProcrustes = zeros(d);
                 for i = 1:n
-                    [U, ~, V] = svd(M^(-0.5) * makespd(varargin{i}) * M^(-0.5));
-                    R = U * V';
-                    sumProcrustes = sumProcrustes + R;
+                    Li = L{i};
+                    [U, ~, V] = svd(L_hat' * Li, 'econ');
+                    Ri= U * V';
+                    sumProcrustes = sumProcrustes + (Li*Ri);
                 end
-                M_next = sumProcrustes / n;
-                if norm(M_next - M, 'fro') < tol || iter >= maxIter
+
+                L_hat_next = sumProcrustes / n;
+                iter = iter + 1;
+        
+                if norm(L_hat_next - L_hat, 'fro') < tol || iter >= maxIter
+                    L_hat = L_hat_next;
                     break;
                 end
-                M = M_next;
-                iter = iter + 1;
+                L_hat=L_hat_next;
+                
             end
+            M = (L_hat * L_hat');
+            M = (M+M')/2;
 
         otherwise
             error('Unsupported method. Choose "log-euclidean" or "procrustes".');
     end
 end
 
+function L = msqrt(A)
+% L = sqrt(A) returns symmetric square root L such that A = L*L'
+% uses eigen-decomposition and clips tiny negative eigenvalues to zero.
+    [V,D,~] = svd(A);
+    d = diag(D);
+    L = V * diag(sqrt(d)) * V';
+    L = (L + L')/2; %ensure symmetry
+end
 
