@@ -35,7 +35,7 @@ function M = frechet_mean(varargin)
             M = expm(sumLog / n);
 
         case 'procrustes'
-            % Compute mean using the Procrustes method
+            % Compute mean using the Procrustes method matrix sqrt based
             tol = 1e-6; % Convergence tolerance
             maxIter = 100; % Maximum iterations
             L = cell(1, n);
