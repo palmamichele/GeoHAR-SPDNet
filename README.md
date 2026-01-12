@@ -37,6 +37,11 @@ net.layers{end+1} = struct('type', 'bfc',...
 %                          'weight', Winit{3}) ;
 net.layers{end+1} = struct('type', opts.loss_function) ;
 
+Please notice that to replicate the experiments the hidden layer dimensions in "_init_afew.m" of each version shall be edited according to the number of lags to be used: 
+for one lag, use 50,50 
+for more than 2 lags, use 100-75
+the HAR input that has 3 lags uses 80-60 
+ 
 
 
 ## License
