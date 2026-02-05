@@ -3,7 +3,7 @@ function Y = vl_logeloss(X, c, dzdy)
 
 batchSize = length(c);
 
-n = size(X{1}, 1);  % Assuming square matrices
+n = size(X{1}, 1);  % Assuming square matrices and approximation of loge grad
 if nargin < 3
     Y = 0;
     for i = 1:batchSize

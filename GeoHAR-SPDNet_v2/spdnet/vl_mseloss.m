@@ -18,7 +18,7 @@ else
   Y = cell(1, batchSize);  % Initialize cell array to store gradients
         for i = 1:batchSize
             % Compute the gradient for the current pair
-            grad = (X{i} - c{i}) / (n^2);  % Average over elements in the matrix
+            grad = 2* (X{i} - c{i}) / (n^2);  % Average over elements in the matrix
             % Multiply by dzdy to propagate through the chain rule
             Y{i} = grad * dzdy;
         end

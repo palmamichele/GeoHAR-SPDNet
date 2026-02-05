@@ -6,8 +6,6 @@ opts.layernum = 3;
 Winit = cell(opts.layernum,1);
 opts.datadim = [length(opts.data(1).X), 80, 60, length(opts.data(1).Y)];
 % for RCOV20 use [length(opts.data(1).X), 40, 30, length(opts.data(1).Y)];
-disp("dimensione di x")
-disp(length(opts.data(1).X))
 
 for iw = 1 : opts.layernum
     A = rand(opts.datadim(iw));
